@@ -6,22 +6,31 @@ import 'package:flutter_app_notepad/notepad_model.dart';
 class NotePadListPage extends StatefulWidget{
 
   @override
-  State<StatefulWidget> createState() => _NotePadListPage();
+  State<StatefulWidget> createState() => _NotePadListPageState();
 }
 
-class _NotePadListPage extends State<NotePadListPage>{
+class _NotePadListPageState extends State<NotePadListPage>{
+  static const String NOTEPAD_DATE_FORMAT = "yyyy-MM-dd";
+  final TextEditingController _notepadTitleController = TextEditingController();
+  List<NotePadModel> _notepadList = [];
 
   //_createNotePadList() 호출하여 화면 그리기
   @override
   Widget build(BuildContext context) {
-    return _createNotePadList();
+    return Scaffold(
+      //FloatingActionButton을 생성하고 누를경우(onPressed)
+      // _openAddTodoDialog를 호출하여 AlertDialog 보여줌줌
+      floatingActionButton: _createFloatingActionButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      body: _createNotePadList(),
+    );
   }
 
   Widget _createNotePadList(){
     return ListView.separated(
-        itemCount: 10,
+        itemCount: _notepadList.length,
         itemBuilder: (BuildContext context, int index){
-          return _createNotePadCard();
+          return _createNotePadCard(_notepadList[index]);
         },
         separatorBuilder: (BuildContext context, int index){
           return Divider(
@@ -33,26 +42,26 @@ class _NotePadListPage extends State<NotePadListPage>{
     );
   }
 
-  Widget _createNotePadCard(){
+  Widget _createNotePadCard(NotePadModel notePadModel){
     return Card(
       elevation: 4.0,
       //귀퉁이가 약간 둥근 형태의 카드
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
       child: Container(
         padding: EdgeInsets.all(16.0),
-        child: _createNotePadRow()
+        child: _createNotePadRow(notePadModel)
       ),
     );
   }
 
   //Row를 사용하여 좌측에 _createNotePadItemContentWidget을
   //우측에 오른쪽 화살표 모양의 아이콘 갖는 Row 반환하기
-  Widget _createNotePadRow(){
+  Widget _createNotePadRow(NotePadModel notePadModel){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _createNotePadItemContentWidget(),
+        _createNotePadItemContentWidget(notePadModel),
         Icon(Icons.keyboard_arrow_right, color:Colors.blue)
       ],
     );
@@ -60,12 +69,12 @@ class _NotePadListPage extends State<NotePadListPage>{
 
   //Column 사용하여 구현. 위는 NotePad Item의 Title을,
   //아래에는 NotePad Item의 생성 날짜를 나타내는 Text로 구성
-  Widget _createNotePadItemContentWidget(){
+  Widget _createNotePadItemContentWidget(NotePadModel notePadModel){
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("NotePad Item Title",
+        Text(notePadModel.getTitle(),
           style: TextStyle(fontSize: 24.0, color:Colors.blue)),
         Divider(
           thickness: 8.0,
@@ -77,72 +86,55 @@ class _NotePadListPage extends State<NotePadListPage>{
       ],
     );
   }
-}
-
-
-class _NotePadListPageState extends State<NotePadListPage>{
-  final TextEditingController _notepadTitleController = TextEditingController();
-  List<NotePadModel> _notepadList = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      //FloatingActionButton을 생성하고 누를경우(onPressed)
-      // _openAddTodoDialog를 호출하여 AlertDialog 보여줌줌
-        floatingActionButton: _createFloatingActionButton(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        body: _createNotePadList(),
-    );
-  }
 
   Widget _createFloatingActionButton(){
     return FloatingActionButton(
-        child: Icon(Icons.add, color: Colors.white),
+      child: Icon(Icons.add, color: Colors.white),
       onPressed: ()=>{
-          _openAddNotePadDialog()
-    },
+        _openAddNotePadDialog()
+      },
     );
   }
 
   void _openAddNotePadDialog(){
     showDialog(
-      context: context,
-      builder: (BuildContext context){
-        //AlertDialog를 보여주기 위해서 "showDialog" 함수에 AlertDialog를 넘겨주면 된다.
-        //
-        // 출처: https://doitddo.tistory.com/119?category=954509 [두잇뚜]
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0)
-          ),
-          title: Text(
-            "여기에 입력해주세요.",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24.0,
-              color: Colors.blue
+        context: context,
+        builder: (BuildContext context){
+          //AlertDialog를 보여주기 위해서 "showDialog" 함수에 AlertDialog를 넘겨주면 된다.
+          //
+          // 출처: https://doitddo.tistory.com/119?category=954509 [두잇뚜]
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)
             ),
-          ),
-          content: TextField(
-            controller: _notepadTitleController,
-          ),
-          actions: [
-            FlatButton(
-              child: new Text(
-                "취소",
-                style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.red
-                  ),
+            title: Text(
+              "여기에 입력해주세요.",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0,
+                  color: Colors.blue
               ),
-              onPressed: (){
-                _notepadTitleController.text="";
-                Navigator.pop(context);
-              },
             ),
-          ],
-        );
-      }
+            content: TextField(
+              controller: _notepadTitleController,
+            ),
+            actions: [
+              FlatButton(
+                child: new Text(
+                  "취소",
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.red
+                  ),
+                ),
+                onPressed: (){
+                  _notepadTitleController.text="";
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        }
     );
   }
 
@@ -155,6 +147,4 @@ class _NotePadListPageState extends State<NotePadListPage>{
       _notepadList.add(newNotePad);
     });
   }
-
-  _createNotePadList() {}
 }

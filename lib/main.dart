@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_notepad/tab_item.dart';
+import 'package:flutter_app_notepad/screens/notepad/notepad_list.dart';
 
 void main() {
-  runApp(NotePadApp());
-}
-class TabItem {
-  String _title;
-  IconData _icon;
-  TabItem(String title, IconData icon) {
-    _title = title;
-    _icon = icon;
-  }
-  String getTitle() => _title;
-  IconData getIcon() => _icon;
+  runApp(NotePadListApp());
 }
 
-class NotePadApp extends StatefulWidget{
+
+class NotePadListApp extends StatefulWidget{
   @override
-  State<StatefulWidget> createState() => _NotePadAppState();
+  State<StatefulWidget> createState() => _NotePadListAppState();
 }
 
-class _NotePadAppState extends State<NotePadApp>{
+class _NotePadListAppState extends State<NotePadListApp>{
   final List<TabItem> _tabItems = [
-    TabItem("note", Icons.clear),
+    TabItem("NotePad", Icons.clear),
     TabItem("In Progress", Icons.loop),
     TabItem("Done", Icons.check),
   ];
