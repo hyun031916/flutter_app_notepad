@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_notepad/notepad_model.dart';
 
 //StatefulWidget의 뼈대 만들기
 //목록이 추가, 삭제, 수정되면서 상태가 변경되는 Page => StatefulWidget
@@ -76,4 +77,84 @@ class _NotePadListPage extends State<NotePadListPage>{
       ],
     );
   }
+}
+
+
+class _NotePadListPageState extends State<NotePadListPage>{
+  final TextEditingController _notepadTitleController = TextEditingController();
+  List<NotePadModel> _notepadList = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      //FloatingActionButton을 생성하고 누를경우(onPressed)
+      // _openAddTodoDialog를 호출하여 AlertDialog 보여줌줌
+        floatingActionButton: _createFloatingActionButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        body: _createNotePadList(),
+    );
+  }
+
+  Widget _createFloatingActionButton(){
+    return FloatingActionButton(
+        child: Icon(Icons.add, color: Colors.white),
+      onPressed: ()=>{
+          _openAddNotePadDialog()
+    },
+    );
+  }
+
+  void _openAddNotePadDialog(){
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        //AlertDialog를 보여주기 위해서 "showDialog" 함수에 AlertDialog를 넘겨주면 된다.
+        //
+        // 출처: https://doitddo.tistory.com/119?category=954509 [두잇뚜]
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0)
+          ),
+          title: Text(
+            "여기에 입력해주세요.",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0,
+              color: Colors.blue
+            ),
+          ),
+          content: TextField(
+            controller: _notepadTitleController,
+          ),
+          actions: [
+            FlatButton(
+              child: new Text(
+                "취소",
+                style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.red
+                  ),
+              ),
+              onPressed: (){
+                _notepadTitleController.text="";
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      }
+    );
+  }
+
+
+  //다이얼로그의 "추가" 버튼을 누르면 _addNewTodo가 호출됨
+  void _addNewNotePad(String title){
+    NotePadModel newNotePad = NotePadModel(title, DateTime.now());
+    //, "setState" 함수 내부에서 _todoList에 새로 생성된 TodoModel 객체를 추가
+    setState(() {
+      _notepadList.add(newNotePad);
+    });
+  }
+
+  _createNotePadList() {}
 }
