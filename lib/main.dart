@@ -16,10 +16,10 @@ class TabItem {
 
 class NotePadApp extends StatefulWidget{
   @override
-  State<StatefulWidget> createState() => _NotePadApp();
+  State<StatefulWidget> createState() => _NotePadAppState();
 }
 
-class _NotePadApp extends State<NotePadApp>{
+class _NotePadAppState extends State<NotePadApp>{
   final List<TabItem> _tabItems = [
     TabItem("note", Icons.clear),
     TabItem("In Progress", Icons.loop),
@@ -28,6 +28,8 @@ class _NotePadApp extends State<NotePadApp>{
 
   int _currentTabIndex = 0;
 
+  //Scaffold 사용, appBar 생성하고
+  // 현재 선택된 탭의 인덱스로 데이터 가져오고 title 설정
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
