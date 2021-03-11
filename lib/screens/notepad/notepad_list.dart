@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notepad/notepad_model.dart';
+import 'file:///C:/Users/Mirim/AndroidStudioProjects/flutter_app_notepad/lib/models/notepad_model.dart';
 
 //StatefulWidget의 뼈대 만들기
 //목록이 추가, 삭제, 수정되면서 상태가 변경되는 Page => StatefulWidget
