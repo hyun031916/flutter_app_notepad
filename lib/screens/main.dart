@@ -35,6 +35,10 @@ class _NotePadListAppState extends State<NotePadListApp>{
       home: Scaffold(
         appBar: AppBar(title: Text(_tabItems[_currentTabIndex].getTitle())),
         bottomNavigationBar: _createBottomNavigationBar(),
+        body: Container(
+          padding: EdgeInsets.all(8.0),
+          child: NotePadListPage(),
+        ),
       ),
     );
   }

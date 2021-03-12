@@ -61,7 +61,3 @@ NotePadState getNotePadStateByValue(int stateValue){
       return NotePadState.notepad;
   }
 }
-
-enum NotePadState {
-  notepad, inProgress, done
-}

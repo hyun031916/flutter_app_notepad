@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter_app_notepad/database.dart';
+import 'package:flutter_app_notepad/database/database.dart';
 import 'package:flutter_app_notepad/models/notepad_model.dart';
 
 class NotePadDao{
@@ -15,7 +15,7 @@ class NotePadDao{
     final db = await dbProvider.database;
 
     List<Map<String, dynamic>> result = await db.query(notepadTable);
-    List<NoePadModel> notepadList = result.isNotEmpty ? result.map((item)=> NotePadModel.fromDatabaseJson(item)).toList():[];
+    List<NotePadModel> notepadList = result.isNotEmpty ? result.map((item)=> NotePadModel.fromDatabaseJson(item)).toList():[];
 
     return notepadList;
   }

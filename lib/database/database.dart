@@ -18,12 +18,13 @@ class DatabaseProvider{
 
   Future<Database> get database async{
     if(_database != null) return _database;
+    _database = await createDatabase();
     return _database;
   }
 
   createDatabase() async{
     Directory docsDir = await getApplicationDocumentsDirectory();
-    String path = join(docsDir.path, "godo.db");
+    String path = join(docsDir.path, "notepad.db");
 
     var database = await openDatabase(path, version: 1, onCreate: initDB, onUpgrade: onUpgrade);
     return database;
@@ -41,7 +42,6 @@ class DatabaseProvider{
         "title TEXT, "
         "state INTEGER,"
         "created_time INTEGER"
-        ")"
-    );
+        ")");
   }
 }
